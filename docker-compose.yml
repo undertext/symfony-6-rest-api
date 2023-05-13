@@ -1,0 +1,32 @@
+version: '3.9'
+
+services:
+  php:
+    image: undertext/symfony-rest-php
+    environment:
+      APP_ENV: prod
+  nginx:
+    image: undertext/symfony-rest-nginx
+    ports:
+      - "80"
+  database:
+    image: postgres:${POSTGRES_VERSION:-15}-alpine
+    restart: always
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-app}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-!ChangeMe!}
+      POSTGRES_USER: ${POSTGRES_USER:-app}
+    volumes:
+      - database_data:/var/lib/postgresql/data:rw
+  cache:
+    image: redis:6.2-alpine
+    restart: always
+    command: redis-server --save 20 1 --loglevel warning
+    volumes:
+      - cache:/data
+
+volumes:
+###> doctrine/doctrine-bundle ###
+  database_data:
+  cache:
+###< doctrine/doctrine-bundle ###

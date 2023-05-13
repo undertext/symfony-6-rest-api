@@ -1,0 +1,30 @@
+version: '3'
+
+services:
+###> doctrine/doctrine-bundle ###
+  database:
+    ports:
+      - "5432"
+###< doctrine/doctrine-bundle ###
+  php:
+    volumes:
+      - consistency: cached
+        source: ./
+        target: /var/www/html
+        type: bind
+    build:
+      context: .
+      dockerfile: ./php/Dockerfile
+      args:
+        TIMEZONE: ${TIMEZONE:-Europe/Amsterdam}
+    environment:
+      APP_ENV: dev
+  nginx:
+    build:
+      context: .
+      dockerfile: ./nginx/Dockerfile
+    volumes:
+      - consistency: cached
+        source: ./public
+        target: /var/www/html/public
+        type: bind
