@@ -12,8 +12,10 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use FOS\RestBundle\Controller\Annotations as Rest;
+use OpenApi\Attributes as OA;
 
 #[Route('/api')]
+#[OA\Tag(name: 'Categories')]
 class CategoriesController extends AbstractController
 {
     #[Rest\Get('/categories', name: 'categories')]

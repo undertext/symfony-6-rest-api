@@ -5,13 +5,17 @@ namespace App\Controller;
 use App\DTO\UserCreationDTO;
 use App\Entity\User;
 use Doctrine\Persistence\ManagerRegistry;
+use Nelmio\ApiDocBundle\Annotation\Security;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use OpenApi\Attributes as OA;
 
 #[Route('/api')]
+#[Security(name: null)]
+#[OA\Tag(name: 'User login')]
 class UserCreationController extends AbstractController {
 
   #[Route('/user/register', name: 'register', methods: ['POST'])]

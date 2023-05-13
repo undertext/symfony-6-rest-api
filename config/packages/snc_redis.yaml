@@ -1,6 +1,6 @@
 snc_redis:
     clients:
         default:
-            type: predis
+            type: phpredis
             alias: default
-            dsn: 'redis://localhost'
+            dsn: 'redis://cache'
