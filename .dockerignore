@@ -1,0 +1,16 @@
+**/.dockerignore
+**/.DS_Store
+**/.git/
+**/.gitattributes
+**/.gitignore
+**/.gitmodules
+**/docker-compose.*.yml
+**/docker-compose.yml
+tests/
+var/
+vendor/
+.editorconfig
+.env.*.local
+.env.local
+.env.local.php
+.env.test
