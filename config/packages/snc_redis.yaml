@@ -3,4 +3,4 @@ snc_redis:
         default:
             type: phpredis
             alias: default
-            dsn: 'redis://cache'
+            dsn: 'redis://localhost'
