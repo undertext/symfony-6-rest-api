@@ -1,0 +1,152 @@
+{
+  "family": "symfony-rest-service",
+  "containerDefinitions": [
+    {
+      "name": "cache",
+      "image": "redis:6.2-alpine",
+      "cpu": 0,
+      "portMappings": [],
+      "essential": true,
+      "command": [
+        "redis-server",
+        "--save",
+        "20",
+        "1",
+        "--loglevel",
+        "warning"
+      ],
+      "environment": [],
+      "mountPoints": [
+        {
+          "sourceVolume": "Cache",
+          "containerPath": "/data"
+        }
+      ],
+      "volumesFrom": [],
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "awslogs-redis",
+          "awslogs-create-group": "true",
+          "awslogs-region": "eu-north-1",
+          "awslogs-stream-prefix": "symfony-rest-service"
+        }
+      }
+    },
+    {
+      "name": "database",
+      "image": "postgres:15-alpine",
+      "cpu": 0,
+      "portMappings": [],
+      "essential": true,
+      "environment": [
+        {
+          "name": "POSTGRES_USER",
+          "value": "${POSTGRES_USER:-app}"
+        },
+        {
+          "name": "POSTGRES_PASSWORD",
+          "value": "${POSTGRES_PASSWORD:-!ChangeMe!}"
+        },
+        {
+          "name": "POSTGRES_DB",
+          "value": "${POSTGRES_DB:-app}"
+        }
+      ],
+      "mountPoints": [
+        {
+          "sourceVolume": "Database_Data",
+          "containerPath": "/var/lib/postgresql/data"
+        }
+      ],
+      "volumesFrom": [],
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "awslogs-database",
+          "awslogs-create-group": "true",
+          "awslogs-region": "eu-north-1",
+          "awslogs-stream-prefix": "symfony-rest-service"
+        }
+      }
+    },
+    {
+      "name": "nginx",
+      "image": "423228881741.dkr.ecr.eu-north-1.amazonaws.com/ecrrepo:symfony-nginx",
+      "cpu": 0,
+      "portMappings": [
+        {
+          "containerPort": 80,
+          "hostPort": 80,
+          "protocol": "tcp"
+        }
+      ],
+      "essential": true,
+      "environment": [],
+      "mountPoints": [],
+      "volumesFrom": [],
+      "dependsOn": [
+        {
+          "containerName": "php",
+          "condition": "START"
+        }
+      ],
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "awslogs-nginx",
+          "awslogs-create-group": "true",
+          "awslogs-region": "eu-north-1",
+          "awslogs-stream-prefix": "symfony-rest-service"
+        }
+      }
+    },
+    {
+      "name": "php",
+      "image": "423228881741.dkr.ecr.eu-north-1.amazonaws.com/ecrrepo:symfony-php",
+      "cpu": 0,
+      "portMappings": [
+        {
+          "containerPort": 9000,
+          "hostPort": 9000,
+          "protocol": "tcp"
+        }
+      ],
+      "essential": true,
+      "environment": [
+        {
+          "name": "APP_ENV",
+          "value": "prod"
+        }
+      ],
+      "mountPoints": [],
+      "volumesFrom": [],
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "awslogs-php",
+          "awslogs-create-group": "true",
+          "awslogs-region": "eu-north-1",
+          "awslogs-stream-prefix": "symfony-rest-service"
+        }
+      }
+    }
+  ],
+  "executionRoleArn": "arn:aws:iam::423228881741:role/ECSRole",
+  "networkMode": "awsvpc",
+  "volumes": [
+    {
+      "name": "Database_Data",
+      "host": {}
+    },
+    {
+      "name": "Cache",
+      "host": {}
+    }
+  ],
+  "requiresCompatibilities": [
+    "FARGATE"
+  ],
+  "cpu": "1024",
+  "memory": "3072"
+}
