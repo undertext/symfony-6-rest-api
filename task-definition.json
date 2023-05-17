@@ -39,20 +39,7 @@
       "cpu": 0,
       "portMappings": [],
       "essential": true,
-      "environment": [
-        {
-          "name": "POSTGRES_USER",
-          "value": "app"
-        },
-        {
-          "name": "POSTGRES_PASSWORD",
-          "value": "!ChangeMe!"
-        },
-        {
-          "name": "POSTGRES_DB",
-          "value": "app"
-        }
-      ],
+      "environment": [],
       "mountPoints": [
         {
           "sourceVolume": "Database_Data",
@@ -60,6 +47,20 @@
         }
       ],
       "volumesFrom": [],
+      "secrets": [
+        {
+          "name": "POSTGRES_USER",
+          "valueFrom": "arn:aws:secretsmanager:eu-north-1:423228881741:secret:prod/Database-Nx1GSE:username::"
+        },
+        {
+          "name": "POSTGRES_PASSWORD",
+          "valueFrom": "arn:aws:secretsmanager:eu-north-1:423228881741:secret:prod/Database-Nx1GSE:password::"
+        },
+        {
+          "name": "POSTGRES_DB",
+          "valueFrom": "arn:aws:secretsmanager:eu-north-1:423228881741:secret:prod/Database-Nx1GSE:dbname::"
+        }
+      ],
       "logConfiguration": {
         "logDriver": "awslogs",
         "options": {
@@ -117,14 +118,16 @@
         {
           "name": "APP_ENV",
           "value": "prod"
-        },
-        {
-          "name": "DATABASE_URL",
-          "value": "postgresql://app:!ChangeMe!@localhost:5432/app?serverVersion=15&charset=utf8"
         }
       ],
       "mountPoints": [],
       "volumesFrom": [],
+      "secrets": [
+        {
+          "name": "DATABASE_URL",
+          "valueFrom": "arn:aws:secretsmanager:eu-north-1:423228881741:secret:prod/Database-Nx1GSE:connectionString::"
+        }
+      ],
       "logConfiguration": {
         "logDriver": "awslogs",
         "options": {

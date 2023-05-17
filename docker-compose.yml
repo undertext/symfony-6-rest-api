@@ -8,7 +8,7 @@ services:
   nginx:
     image: undertext/symfony-rest-nginx
     ports:
-      - "80"
+      - "80:80"
   database:
     image: postgres:${POSTGRES_VERSION:-15}-alpine
     restart: always

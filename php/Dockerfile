@@ -26,9 +26,6 @@ RUN apt-get update && apt-get install -y \
     libpq-dev \
     && echo 'alias sf="php bin/console"' >> ~/.bashrc
 
-COPY --from=composer /composer /usr/bin/composer
-RUN composer install --no-dev --no-scripts --no-progress --optimize-autoloader
-
 RUN docker-php-ext-configure gd --with-jpeg --with-freetype
 
 RUN docker-php-ext-install \
@@ -36,9 +33,16 @@ RUN docker-php-ext-install \
 
 RUN pecl install redis && docker-php-ext-enable redis
 
+ENV APP_ENV=build
+
+COPY --from=composer /composer /usr/bin/composer
+RUN composer install --no-dev --no-scripts --no-progress --optimize-autoloader
+
 RUN if [ -n "$JWT_SECRET" ]; then echo "$JWT_SECRET" > /var/www/html/config/jwt/private.pem; fi
 
 RUN if [ -n "$JWT_PUBLIC" ]; then echo "$JWT_PUBLIC" > /var/www/html/config/jwt/public.pem; fi
+
+RUN php bin/console assets:install
 
 # Set timezone
 RUN ln -snf /usr/share/zoneinfo/${TIMEZONE} /etc/localtime && echo ${TIMEZONE} > /etc/timezone \
