@@ -42,15 +42,15 @@
       "environment": [
         {
           "name": "POSTGRES_USER",
-          "value": "${POSTGRES_USER:-app}"
+          "value": "app"
         },
         {
           "name": "POSTGRES_PASSWORD",
-          "value": "${POSTGRES_PASSWORD:-!ChangeMe!}"
+          "value": "!ChangeMe!"
         },
         {
           "name": "POSTGRES_DB",
-          "value": "${POSTGRES_DB:-app}"
+          "value": "app"
         }
       ],
       "mountPoints": [
@@ -117,6 +117,10 @@
         {
           "name": "APP_ENV",
           "value": "prod"
+        },
+        {
+          "name": "DATABASE_URL",
+          "value": "postgresql://app:!ChangeMe!@localhost:5432/app?serverVersion=15&charset=utf8"
         }
       ],
       "mountPoints": [],
@@ -132,6 +136,7 @@
       }
     }
   ],
+  "taskRoleArn": "arn:aws:iam::423228881741:role/ECSRole",
   "executionRoleArn": "arn:aws:iam::423228881741:role/ECSRole",
   "networkMode": "awsvpc",
   "volumes": [

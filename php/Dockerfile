@@ -29,13 +29,16 @@ RUN apt-get update && apt-get install -y \
 COPY --from=composer /composer /usr/bin/composer
 RUN composer install --no-dev --no-scripts --no-progress --optimize-autoloader
 
-
 RUN docker-php-ext-configure gd --with-jpeg --with-freetype
 
 RUN docker-php-ext-install \
     pdo pdo_mysql pdo_pgsql zip xsl gd intl opcache exif mbstring
 
 RUN pecl install redis && docker-php-ext-enable redis
+
+RUN if [ -n "$JWT_SECRET" ]; then echo "$JWT_SECRET" > /var/www/html/config/jwt/private.pem; fi
+
+RUN if [ -n "$JWT_PUBLIC" ]; then echo "$JWT_PUBLIC" > /var/www/html/config/jwt/public.pem; fi
 
 # Set timezone
 RUN ln -snf /usr/share/zoneinfo/${TIMEZONE} /etc/localtime && echo ${TIMEZONE} > /etc/timezone \
