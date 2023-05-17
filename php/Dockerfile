@@ -42,8 +42,6 @@ RUN if [ -n "$JWT_SECRET" ]; then echo "$JWT_SECRET" > /var/www/html/config/jwt/
 
 RUN if [ -n "$JWT_PUBLIC" ]; then echo "$JWT_PUBLIC" > /var/www/html/config/jwt/public.pem; fi
 
-RUN php bin/console assets:install
-
 # Set timezone
 RUN ln -snf /usr/share/zoneinfo/${TIMEZONE} /etc/localtime && echo ${TIMEZONE} > /etc/timezone \
     && printf '[PHP]\ndate.timezone = "%s"\n', ${TIMEZONE} > /usr/local/etc/php/conf.d/tzone.ini \

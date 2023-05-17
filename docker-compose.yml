@@ -2,11 +2,11 @@ version: '3.9'
 
 services:
   php:
-    image: undertext/symfony-rest-php
+    image: symfony-php
     environment:
       APP_ENV: prod
   nginx:
-    image: undertext/symfony-rest-nginx
+    image: symfony-nginx
     ports:
       - "80:80"
   database:
