@@ -28,6 +28,7 @@ jobs:
         run: |
           docker build -f php/Dockerfile -t $ECR_REGISTRY/$ECR_REPOSITORY:symfony-php .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:symfony-php
+          docker tag $ECR_REGISTRY/$ECR_REPOSITORY:symfony-php symfony-php
           docker build -f nginx/Dockerfile -t $ECR_REGISTRY/$ECR_REPOSITORY:symfony-nginx .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:symfony-nginx
 

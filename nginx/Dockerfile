@@ -1,4 +1,4 @@
-FROM 423228881741.dkr.ecr.eu-north-1.amazonaws.com/ecrrepo:symfony-php as php
+FROM symfony-php as php
 RUN php bin/console assets:install
 
 FROM nginx:1.21-alpine

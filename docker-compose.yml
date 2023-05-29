@@ -7,6 +7,8 @@ services:
       APP_ENV: prod
   nginx:
     image: symfony-nginx
+    environment:
+      PHP_FPM_HOST: php
     ports:
       - "80:80"
   database:
