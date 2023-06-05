@@ -1,0 +1,62 @@
+# Kubernetes php service
+apiVersion: v1
+kind: Service
+metadata:
+  name: php-service
+spec:
+  selector:
+    app: php
+    tier: backend
+  ports:
+    - name: http
+      protocol: TCP
+      port: 9000
+
+---
+# Kubernetes php deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: php-deployment
+  labels:
+    tier: backend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: php
+      tier: backend
+  template:
+    metadata:
+      labels:
+        app: php
+        tier: backend
+    spec:
+      initContainers:
+        - name: db-migration
+          imagePullPolicy: IfNotPresent
+          image: symfony-php
+          env:
+            - name: APP_ENV
+              value: "PROD"
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: database
+                  key: connectionString
+          command: [ "php", "bin/console", "doctrine:migrations:migrate" ]
+      containers:
+        - name: php
+          imagePullPolicy: IfNotPresent
+          image: symfony-php
+          ports:
+            - containerPort: 9000
+          env:
+            - name: APP_ENV
+              value: "PROD"
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: database
+                  key: connectionString
+
