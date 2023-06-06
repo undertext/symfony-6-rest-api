@@ -3,7 +3,7 @@ README
 This is a simple project to show how to build a simple REST API
 using Symfony framework and Docker.
 It also shows how to use Docker Compose to run the application and
-how to deploy it to Amazon Container Service (ECS) and to Elastic Container Service (EKS).
+how to deploy it to Amazon Container Service (ECS) and to Elastic Kubernetes Service (EKS).
 
 ## Symfony bundles used
 `FrameworkBundle` - base bundle for Symfony framework, provides such functionality as routing, configuration, 
