@@ -25,6 +25,8 @@ jobs:
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           ECR_REPOSITORY: ecrrepo
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          JWT_PUBLIC: ${{ secrets.JWT_PUBLIC }}
         run: |
           docker build -f php/Dockerfile -t $ECR_REGISTRY/$ECR_REPOSITORY:symfony-php .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:symfony-php
@@ -32,9 +34,9 @@ jobs:
           docker build -f nginx/Dockerfile -t $ECR_REGISTRY/$ECR_REPOSITORY:symfony-nginx .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:symfony-nginx
 
-      - name: Deploy to Amazon ECS service
-        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
-        with:
-          task-definition: task-definition.json
-          service: symfony-rest-service
-          cluster: SymfonyCluster
+#      - name: Deploy to Amazon ECS service
+#        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+#        with:
+#          task-definition: task-definition.json
+#          service: symfony-rest-service
+#          cluster: SymfonyCluster
